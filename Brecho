@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Brechó Sustentável</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --verde: #4caf50;
+      --verde-escuro: #2e7d32;
+      --cinza-claro: #f5f5f5;
+      --branco: #fff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--cinza-claro);
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--verde);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    nav {
+      background: var(--verde-escuro);
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    section {
+      padding: 30px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--verde-escuro);
+      margin-bottom: 20px;
+    }
+
+    #filtros {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input, select {
+      padding: 10px;
+      width: 90%;
+      max-width: 400px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .catalogo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .item {
+      background: var(--branco);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    /* Galeria */
+    .slider {
+      max-width: 100%;
+      margin: auto;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+    }
+
+    .slide img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .ativo {
+      display: block;
+    }
+
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 500px) {
+      nav {
+        flex-direction: column;
+      }
+
+      .item img {
+        height: 160px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Brechó Sustentável</h1>
+    <p>Soluções de moda consciente e colaborativa</p>
+  </header>
+
+  <nav>
+    <a href="#catalogo">Catálogo</a>
+    <a href="#galeria">Galeria</a>
+  </nav>
+
+  <section id="catalogo">
+    <h2>Catálogo de Roupas</h2>
+    <div id="filtros">
+      <input type="text" id="busca" placeholder="Buscar por nome..." />
+      <select id="tipo">
+        <option value="">Todos os tipos</option>
+        <option value="blusa">Blusa</option>
+        <option value="calça">Calça</option>
+        <option value="vestido">Vestido</option>
+        <option value="acessório">Acessório</option>
+      </select>
+    </div>
+    <div class="catalogo" id="listaCatalogo"></div>
+  </section>
+
+  <section id="galeria">
+    <h2>Galeria de Fotos</h2>
+    <div class="slider">
+      <div class="slide ativo">
+        <img src="https://via.placeholder.com/800x400?text=Evento+1" alt="Evento 1" />
+      </div>
+      <div class="slide">
+        <img src="https://via.placeholder.com/800x400?text=Oficina+Sustentável" alt="Oficina" />
+      </div>
+      <div class="slide">
+        <img src="https://via.placeholder.com/800x400?text=Roupas+do+Brechó" alt="Roupas" />
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Brechó Sustentável | Projeto Uniasselvi</p>
+  </footer>
+
+  <script>
+    const roupas = [
+      { nome: "Blusa de Linho", tipo: "blusa", imagem: "https://via.placeholder.com/200x200?text=Blusa" },
+      { nome: "Calça Jeans Reciclada", tipo: "calça", imagem: "https://via.placeholder.com/200x200?text=Calça" },
+      { nome: "Vestido Floral", tipo: "vestido", imagem: "https://via.placeholder.com/200x200?text=Vestido" },
+      { nome: "Lenço Ecológico", tipo: "acessório", imagem: "https://via.placeholder.com/200x200?text=Lenço" },
+      { nome: "Blusa Estampada", tipo: "blusa", imagem: "https://via.placeholder.com/200x200?text=Blusa+Estampada" }
+    ];
+
+    const catalogo = document.getElementById("listaCatalogo");
+    const busca = document.getElementById("busca");
+    const tipo = document.getElementById("tipo");
+
+    function renderizarCatalogo() {
+      const termo = busca.value.toLowerCase();
+      const filtroTipo = tipo.value;
+      catalogo.innerHTML = "";
+
+      roupas
+        .filter(item => item.nome.toLowerCase().includes(termo) && (filtroTipo === "" || item.tipo === filtroTipo))
+        .forEach(item => {
+          const div = document.createElement("div");
+          div.className = "item";
+          div.innerHTML = `
+            <img src="${item.imagem}" alt="${item.nome}" />
+            <h3>${item.nome}</h3>
+            <p>Tipo: ${item.tipo}</p>
+          `;
+          catalogo.appendChild(div);
+        });
+    }
+
+    busca.addEventListener("input", renderizarCatalogo);
+    tipo.addEventListener("change", renderizarCatalogo);
+    renderizarCatalogo();
+
+    // Slider automático
+    let slideAtual = 0;
+    const slides = document.querySelectorAll(".slide");
+
+    function mostrarSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle("ativo", i === index);
+      });
+    }
+
+    setInterval(() => {
+      slideAtual = (slideAtual + 1) % slides.length;
+      mostrarSlide(slideAtual);
+    }, 3000);
+  </script>
+
+</body>
+</html>
